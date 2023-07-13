@@ -1,3 +1,34 @@
+
+def add_book_to_db():
+    pass
+
+def get_book_info():
+    pass
+
+def borrow_book():
+    pass
+
+def return_book():
+    pass
+
+
+def view_borrowed_books():
+    pass
+
+
+def exit_program():
+    pass
+
+
+menu_options = {
+    1: add_book_to_db,
+    2: get_book_info,
+    3: borrow_book,
+    4: return_book,
+    5: view_borrowed_books,
+    6: exit_program
+}
+
 def main_menu():
     while True:
         print("도서관 메뉴")
