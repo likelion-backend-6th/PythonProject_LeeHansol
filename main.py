@@ -1,6 +1,27 @@
+import psycopg2
+
+def db_connect():
+    connection = psycopg2.connect(
+        host='localhost',
+        port='5433',
+        dbname='postgres',
+        user='postgres',
+        password='jkhldh940411',
+    )
+    return connection
 
 def add_book_to_db():
-    pass
+    print('-------------')
+    print('도서입력')
+    print('-------------')
+    title = input("제목 : ")
+    author = input("저자 : ")
+    publisher = input("출판사 : ")
+    print(f"입력값 : {title},{author},{publisher}")
+    connection = db_connect()
+    print(connection)
+    connection.close()
+
 
 def get_book_info():
     pass
@@ -31,9 +52,21 @@ menu_options = {
 
 def main_menu():
     while True:
-        print("도서관 메뉴")
+        print('-------------')
+        print('도서관 메뉴')
+        print('-------------')
+        print('1. 도서 정보 입력')
+        print('2. 도서 정보 조회')
+        print('3. 도서 대출')
+        print('4. 도서 반납')
+        print('5. 대출 도서 조회')
+        print('6. 종료')
+        print('-------------')
         try:
             selected_menu = int(input("메뉴를 선택하세요 : "))
+            menu_action = menu_options.get(selected_menu)
+            menu_action()
+
             print(selected_menu)
             if selected_menu == 6:
                 break
