@@ -4,7 +4,7 @@ def db_connect():
     connection = psycopg2.connect(
         host='localhost',
         port='5433',
-        dbname='postgres',
+        dbname='library',
         user='postgres',
         password='jkhldh940411',
     )
@@ -19,26 +19,68 @@ def add_book_to_db():
     publisher = input("출판사 : ")
     print(f"입력값 : {title},{author},{publisher}")
     connection = db_connect()
-    print(connection)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO books1 (title, author, publisher) VALUES (%s, %s, %s)", (title, author, publisher))
+    connection.commit()
+    cursor.close()
     connection.close()
+    # 커서는 커넥션에 기반
 
 
 def get_book_info():
-    pass
+    id = input("조회 할 아이디를 입력하세요 : ")
+    connection = db_connect()
+    cursor = connection.cursor()
+    cursor.execute("SELECT id, title, author, publisher, borrowed FROM books1 WHERE id = %s", (id,))
+    result = cursor.fetchone()
+    if result:
+        print(f"ID: {result[0]}, 제목: {result[1]}, 저자: {result[2]}, 출판사: {result[3]}", end='')
+        print("도서상태: 대출중" if result[4] else "도서상태: 대출가능")
+    else:
+        print("해당 도서를 찾을 수 없습니다.")
+    cursor.close()
+    connection.close()
 
 def borrow_book():
-    pass
+    book_id = input("대출할 도서의 ID를 입력하세요: ")
+    connection = db_connect()
+    cursor = connection.cursor()
+    cursor.execute("UPDATE books1 SET borrowed = True WHERE id = %s", (book_id,))
+    connection.commit()
+    print("도서가 성공적으로 대출되었습니다.")
+    input("계속하려면 아무키나 입력하세요")
+    cursor.close()
+    connection.close()
 
 def return_book():
-    pass
+    book_id = input("반납할 도서의 ID를 입력하세요: ")
+    connection = db_connect()
+    cursor = connection.cursor()
+    cursor.execute("UPDATE books1 SET borrowed = False WHERE id = %s", (book_id,))
+    connection.commit()
+    print("도서가 성공적으로 반납되었습니다.")
+    input("계속하려면 아무키나 입력하세요")
+    cursor.close()
+    connection.close()
 
 
 def view_borrowed_books():
-    pass
+    connection = db_connect()
+    cursor = connection.cursor()
+    cursor.execute("SELECT id, title, author, publisher, borrowed FROM books1 WHERE borrowed = True")
+    result_list = cursor.fetchall()
+    for result in result_list:
+        print(f"ID: {result[0]}, 제목: {result[1]}, 저자: {result[2]}, 출판사: {result[3]}", end=' ')
+        print("도서상태: 대출중" if result[4] else "도서상태: 대출가능")
+    if len(result_list) == 0:
+        print("대출중인 도서가 없습니다.")
+    cursor.close()
+    connection.close()
+
 
 
 def exit_program():
-    pass
+    print("프로그램을 종료합니다.")
 
 
 menu_options = {
