@@ -1,12 +1,17 @@
 def main_menu():
-    print("도서관 메뉴")
-    try:
-        selected_menu = int(input("메뉴를 선택하세요 : "))
-        print(selected_menu)
-    except ValueError:
-        print("잘못된 입력입니다. 숫자를 입력해주세요.")
-    except Exception as e:
-        print(f"오류가 발생했습니다. {e}")
+    while True:
+        print("도서관 메뉴")
+        try:
+            selected_menu = int(input("메뉴를 선택하세요 : "))
+            print(selected_menu)
+            if selected_menu == 6:
+                break
+        except ValueError:
+            print("잘못된 입력입니다. 숫자를 입력해주세요.")
+        except Exception as e:
+            print(f"오류가 발생했습니다. {e}")
+
+
 
 if __name__ == '__main__':
     main_menu()
